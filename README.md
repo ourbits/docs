@@ -17,12 +17,29 @@ OurBits 站点 API 文档
 - 请求方法： 除非接口特别说明，否则均为 GET 请求
 - 请求参数： 
   - 无论是否为GET请求，请求字段 `&action=` （下称`接口请求动作`）均必备，格式说明见 [nikic/FastRoute](https://github.com/nikic/FastRoute#defining-routes) ，此处不再累述
+  - 如果接口声明支持分页，则分页使用以下参数，以下不再累述。
+    | 参数名 | 必要 | 类型 | 说明 |
+    |:---:|:---:|:---:|:---|
+    | page | √ | int | 页数，以0为基底 |
+    | limit | x | int | 单页返回数量，具体见各接口说明 `limit=<默认单页大小,?最大单页大小>`。当你传入的值超过`最大单页大小`，服务器会静默处理至设置值而不会报错。 |
+  - 如果接口声明支持搜索，则搜索使用以下参数，以下不再累述
+    | 参数名 | 必要 | 类型 | 说明 |
+    |:---:|:---:|:---:|:---|
+    | search | x | string | 搜索字符串 |
   - 其余参数（在 `params` 还是 `body` 中）见各接口方法介绍
 - 除用户认证接口（ user/{~~signup~~, login} ）外，其余方法均需要用户凭证，之后不做额外说明（凭证提供方法见下）
 - 接口响应格式：
-   ```json
-   {"success":false, "data":null}
-   ```
+```json5
+{
+  "success": false, 
+  "data": null,  // 响应数据
+  "pager": {   // 如果接口支持分页，则还有此项存在
+    "page": 0, // 当前分页
+    "limit": 50,  // 当前分页大小
+    "total": 10  // 分页总数
+  },
+}
+```
    - 如果响应成功，则响应数据在 `data` 字段中（下方成功响应实例均在该字段中），同时 `success` 字段值为真。
    - 如果相应失败，则 `data` 字段为 `null` ，此外还会存在 `errorCode`, `errorMsg` 字段，请根据 [ErrorCode 说明](#99-errorcode-说明) 进行检查。
 
@@ -60,16 +77,16 @@ OurBits 站点 API 文档
 - 接口功能：获取文件树形式的种子文件列表
 - 接口请求动作： `torrent/{id:\d+}/files`
 - 成功响应示例：
-  ```json5
-  {
-      "torrentName": {   // 种子名
-          "Dir1": {   // 子文件夹（如有）
-              "file1": 12345678,   //  文件+大小
-          },
-          "file2": 12345678,
-          "file3": 12345678 
-      }
+```json5
+{
+  "torrentName": {   // 种子名
+    "Dir1": {   // 子文件夹（如有）
+      "file1": 12345678,   //  文件+大小
+    },
+    "file2": 12345678,
+    "file3": 12345678
   }
+}
   ```
 
 ## 3.3 种子做种情况
@@ -93,19 +110,17 @@ OurBits 站点 API 文档
  - 接口功能：赠送一定数量的魔力值给对应种子发布者，发布者会收到税后的魔力值。
  - 接口请求动作：`POST torrent/{id:\d+}/magic`
  - 接口请求参数：
-
   | 参数名 | 必要 | 类型 | 说明 |
   |:---:|:---:|:---:|:---|
   | value | √ | enum{ 50, 100, 200, 500, 1000 } | 需要赠送的魔力值 |
-
  - 成功响应示例：
- ```json5
- {
-     "torrentId": 1234,  // 种子id
-     "point": 100,  // 赠送的魔力值
-     "msg": "Sent Bonus 100 to Torrent 1234 Successful"
+```json5
+{
+  "torrentId": 1234,  // 种子id
+  "point": 100,  // 赠送的魔力值
+  "msg": "Sent Bonus 100 to Torrent 1234 Successful"
  }
- ```
+```
 
 // TODO
 
@@ -125,25 +140,50 @@ OurBits 站点 API 文档
 
 ### 5.3.1 获取一条趣味盒内容
 
-- 接口功能：获取一条趣味盒的内容，如果未传入id，则默认获取最新一条
+- 接口功能：获取一条趣味盒的内容，如果未传入id，则默认获取最新一条。此接口不返回有趣程度为 `dull`或`banned` 的趣味盒信息。
 - 接口请求动作： `site/fun/view[/{id:\d+}]`
 - 成功响应示例：
- ```json5
-  {
-    "id": "1234",  // *趣味盒的id
-    "userid": "12345", // *该趣味盒发布者的uid
-    "userHtml": "",   // 以html形式展示的发布者信息
-    "added": "2021-09-26 10:57:52",  // 趣味盒发布时间
-    "title": "Title",  // 标题
-    "body": "Body",  // 趣味盒主题内容，BBcode格式，需要进行转换
-    "status": "normal",  // 该趣味盒的有趣程度 enum ('normal', 'dull', 'notfunny', 'funny', 'veryfunny', 'banned')
-    "vote": {    // 对该趣味盒投票信息
-      "total": "2333",  // *总数
-      "fun": "1234"  // *感觉有趣的数量
-    }
+```json5
+{
+  "id": "1234",  // * 趣味盒的id
+  "userid": "12345", // * 该趣味盒发布者的uid
+  "userHtml": "",   // 以html形式展示的发布者信息
+  "added": "2021-09-26 10:57:52",  // 趣味盒发布时间
+  "title": "Title",  // 标题
+  "body": "Body",  // 趣味盒主题内容，BBcode格式，需要进行转换
+  "status": "normal",  // 该趣味盒的有趣程度 enum ('normal', 'dull', 'notfunny', 'funny', 'veryfunny', 'banned')
+  "vote": {    // 对该趣味盒投票信息
+    "total": "2333",  // * 总数
+    "fun": "1234"  // * 感觉有趣的数量
   }
-  ```
-  * 由于缓存等原因，这几个值类型可能为 `string<int> | int`
+  // * 由于缓存等原因，这几个值类型可能为 `string<int> | int`
+}
+```
+
+### 5.3.2 获取趣味盒列表
+
+- 接口功能：获取趣味盒列表。此接口不返回有趣程度为 `banned` 的趣味盒信息，以及趣味盒的投票信息 `vote`。
+- 接口请求动作： `site/fun/list`，支持搜索、分页（`limit=<10,50>`）
+- 接口请求参数：
+  | 参数名 | 必要 | 类型 | 说明 |
+  |:---:|:---:|:---:|:---|
+  | field | x | enum{ 'title','body','both' } | 搜索字符串的位置，`default='title'` |
+- 成功响应实例：
+```json5
+{
+  search: 'search_text',  // 如果使用搜索，则存在该字段
+  list: [
+    {
+      "id": "1234",  // * 趣味盒的id
+      "added": "2021-09-26 10:57:52",  // 趣味盒发布时间
+      "title": "Title",  // 标题
+      "body": "Body",  // 趣味盒主题内容，BBcode格式，需要进行转换
+      "status": "normal"  // 该趣味盒的有趣程度 enum ('normal', 'dull', 'notfunny', 'funny', 'veryfunny', 'banned')
+    },
+    // ....
+  ]
+}
+```
 
 # 第三方支持
 
