@@ -77,11 +77,15 @@ OurBits 站点 API 文档
 
 ## 用户凭证
 
+1. 凭证来源：使用 `/auth/login` 接口获取站点认证JWT，或也可以使用站点Cookies中的 `ourbits_jwt` 值。
+2. 凭证使用：
+   1. 推荐使用HTTP-Header `Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.xxxxxxxxxxxx` 的形式，以便符合 [rfc6750](https://www.rfc-editor.org/rfc/rfc6750) 规范。
+   2. 但由于历史原因，我们同样对以HTTP-Header `Cookie: ourbits_jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.xxxxxxxxxxx` 这种以Cookies形式进行身份认证进行支持，且支持程度更高。 
 
 ## 频率限制
 
 - 对于未携带用户凭证的请求，其请求频率基于ip地址进行限制，限制请求为每分钟5次；
-- 对除下列具体说明的接口，其请求频率基于用户凭证进行限制，限制请求均为每分钟60次：
+- 对除下列具体说明的接口，其请求频率基于`用户凭证和请求动作`进行限制，限制请求均为每分钟10次：
   - 种子搜索： 每分钟 5次；
 
 
@@ -98,7 +102,7 @@ OurBits 站点 API 文档
 
 # 3. 种子相关
 
-> 如无特别说明，本节中 `接口请求动作` 中的 `id`参数均为种子id。 
+> 如无特别说明，本节中 `接口请求动作` 中的 `id` 参数均为种子id。 
 
 ## 3.1 获取种子基本信息
 
@@ -234,5 +238,6 @@ OurBits 站点 API 文档
 | 40003 | 请求处理过程中不满足相关要求，具体内容见`errorMsg` |
 | 40101 | 访问需要认证的接口但没有提供凭证 |
 | 40102 | 用户状态不正常（如封存状态），无法完全授权 | 
+| 42901 | 频率限制，请等待一段时间后重试 |
 | 499xx | 为各接口自定义错误，具体请见接口说明 |
 | 99999 | 未指定错误 |
