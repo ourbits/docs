@@ -143,7 +143,7 @@ OurBits 站点 API 文档
 | tag_hdrp       | x         | boolean           | 0       | HDR10+ |
 | tag_hlg        | x         | boolean           | 0       | HLG |
 | sort           | x           | enum{0,1,3,4,5,6,7,8,9} | 0 | 排序列： 0 - id, 1 - name, 3 - coments, 4 - added, 5 - size , 6 - times_completed , 7 - seeders , 8 - leechers, 9 - owner |
-| type           | x           | enum{'asc', 'desc'} | 'desc  | 排列顺序（升序还是降序） |
+| type           | x           | enum{'asc', 'desc'} | 'desc'  | 排列顺序（升序还是降序） |
 | page           | x           | int                | 0      | 第？页（mode不存在或非rss时使用）  |
 | rows           | x         | enum{10,20,30,40,50} | 10    | 每页返回的种子数量（mode为rss时使用） |
 | startindex     | x         | enum{0,1,2,3}                | 0       | 第？页（mode为rss时使用） |
@@ -151,6 +151,7 @@ OurBits 站点 API 文档
 说明： 
 1. 标`*`的请求项如果不存在时，会尝试从用户设置（`设置-网站设置-默认分类`）中获取。
 2. 仅`mode`为rss时，支持设置分页的每页大小，其余情况默认为用户设置值（`设置-网站设置-种子页面`）
+3. 除`mode`为rss时外，其余情况会先按照 `pos_group:desc` （置顶类型）进行排序，后考虑用户传入的排序顺序
 
 - 成功响应示例：
 ```json5
