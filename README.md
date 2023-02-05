@@ -124,9 +124,9 @@ OurBits 站点 API 文档
 | processing   | x      | string\|string[]   | null *    | 地区 |
 | team         | x      | string\|string[]   | null *    | 制作组 |
 | audiocodec   | x      | string\|string[]   | null *    | 音频编码 |
-| incldead     | x         | enum{0,1,2}       | x            | 0  *     | 显示断种/活种：  0 - 包括断种， 1 - 活种， 2 - 断种 | 
-| spstate      | x         | enum{range(0, 7)}       | x            | 0  *     | 促销：   0 - 全部， 1-7 分别表示不同优惠等级 | 
-| inclbookmarked | x       | enum{0,1,2}       | x            | 0  *     | 显示收藏：  0 - 全部， 1 - 仅收藏， 2 - 仅未收藏（因历史遗留问题，当mode为rss时，表示`保种区`） |
+| incldead     | x         | enum{0,1,2}      | 0  *     | 显示断种/活种：  0 - 包括断种， 1 - 活种， 2 - 断种 | 
+| spstate      | x         | enum{range(0, 7)}   | 0  *     | 促销：   0 - 全部， 1-7 分别表示不同优惠等级 | 
+| inclbookmarked | x       | enum{0,1,2}      | 0  *     | 显示收藏：  0 - 全部， 1 - 仅收藏， 2 - 仅未收藏（因历史遗留问题，当mode为rss时，表示`保种区`） |
 | size           | x       | {min?: int, max?: int} | null | 种子大小（MiB） |
 | times_completed | x      | {min?: int, max?: int} | null | 完成数 |
 | seeders         | x      | {min?: int, max?: int} | null | 做种数（不一定精准） |
