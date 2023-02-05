@@ -117,13 +117,13 @@ OurBits 站点 API 文档
 | search_mode | x | enum{0,1,2} | 0 | 匹配模式： 0 - 与（NPHP默认模式）， 1 - 或， 2 - 精准（使用英文双引号确定存在词） |
 | search_area | x | enum{0,3,4,5} | 0 | 范围：     0 - 标题、副标题（默认）， 3 - 发布者， 4 - imdb id， 5 - 豆瓣id |
 | notnewword | x | boolean | 0 | 是否新热门词 |
-| cat          | x      | string|string[]   | null *    | 类型 |
-| medium       | x      | string|string[]   | null *    | 媒介 |
-| codec        | x      | string|string[]   | null *    | 编码 |
-| standard     | x      | string|string[]   | null *    | 分辨率 |
-| processing   | x      | string|string[]   | null *    | 地区 |
-| team         | x      | string|string[]   | null *    | 制作组 |
-| audiocodec   | x      | string|string[]   | null *    | 音频编码 |
+| cat          | x      | string\|string[]   | null *    | 类型 |
+| medium       | x      | string\|string[]   | null *    | 媒介 |
+| codec        | x      | string\|string[]   | null *    | 编码 |
+| standard     | x      | string\|string[]   | null *    | 分辨率 |
+| processing   | x      | string\|string[]   | null *    | 地区 |
+| team         | x      | string\|string[]   | null *    | 制作组 |
+| audiocodec   | x      | string\|string[]   | null *    | 音频编码 |
 | incldead     | x         | enum{0,1,2}       | x            | 0  *     | 显示断种/活种：  0 - 包括断种， 1 - 活种， 2 - 断种 | 
 | spstate      | x         | enum{range(0, 7)}       | x            | 0  *     | 促销：   0 - 全部， 1-7 分别表示不同优惠等级 | 
 | inclbookmarked | x       | enum{0,1,2}       | x            | 0  *     | 显示收藏：  0 - 全部， 1 - 仅收藏， 2 - 仅未收藏（因历史遗留问题，当mode为rss时，表示`保种区`） |
