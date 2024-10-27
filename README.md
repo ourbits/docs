@@ -4,7 +4,7 @@ OurBits 站点 API 文档
 2021年9月起，本站将迁移多数方法到新的 JSONAPI 中，抛弃并迁移 原有 ajax 加载网页的方法，以及原 `api.php` 路径下相关方法。
 本处为站点新的 API 文档相关说明。
 
-最近更新： `2023-02-05 13:02`
+最近更新： `2024-10-27 23:00`
 
 请注意： 
  - 此处所有 API 介绍均非 stable 状态，请勿依赖，或经常性检查本文档。
@@ -333,6 +333,21 @@ OurBits 站点 API 文档
   ]
 }
 ```
+
+
+# 9. 其他杂项
+
+## 9.1 Pt-Gen提供的媒体介绍信息
+
+- 接口功能：返回从 Pt-Gen 中存储的来自douban,imdb的媒体介绍信息。此接口数据从上游 Pt-Gen 镜像，故只支持已存在的数据查询，而不支持新数据的生成。
+- 接口请求动作： `utils/external_info/{site:(?:douban|imdb)}/{sid}` 。 请使用ptgen的site, sid参数，不支持url参数
+- 成功响应实例：
+```json5
+{
+  // 参见 https://github.com/Rhilip/PT-help/tree/master/modules/infogen ，此处不再累述
+}
+```
+
 
 # 第三方支持
 
