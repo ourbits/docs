@@ -13,10 +13,12 @@ OurBits 站点 API 文档
 
 # API 介绍
 
-- API 路径： `jsonapi.php`
+- API 路径：
+  - `<baseurl>/jsonapi.php?action=<action>`
+  - `<baseurl>/api/<action>`
 - 请求方法： 除非接口特别说明，否则均为 GET 请求
 - 请求参数： 
-  - 无论是否为GET请求，请求字段 `&action=` （下称`接口请求动作`）均必备，格式说明见 [nikic/FastRoute](https://github.com/nikic/FastRoute#defining-routes) ，此处不再累述
+  - API路径中的 `<action>` （下称`接口请求动作`）均必备，格式说明见 [nikic/FastRoute](https://github.com/nikic/FastRoute#defining-routes) ，此处不再累述
   - 如果接口声明支持分页，除另有说明外，则分页使用以下参数，以下不再累述。
     | 参数名 | 必要 | 类型 | 说明 |
     |:---:|:---:|:---:|:---|
