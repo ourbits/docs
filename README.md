@@ -4,7 +4,7 @@ OurBits 站点 API 文档
 2021年9月起，本站将迁移多数方法到新的 JSONAPI 中，抛弃并迁移 原有 ajax 加载网页的方法，以及原 `api.php` 路径下相关方法。
 本处为站点新的 API 文档相关说明。
 
-最近更新： `2024-10-27 23:00`
+最近更新： `2024-12-14 23:00`
 
 请注意： 
  - 此处所有 API 介绍均非 stable 状态，请勿依赖，或经常性检查本文档。
@@ -111,47 +111,39 @@ OurBits 站点 API 文档
 - 请求动作参数： mode不存在时为普通搜索，为`rescue`时搜索保种区，为`myrss`时搜索下载筐；为`rss`时，表现与普通搜索一致，仅因历史兼容问题，影响部分请求参数情况（详见下方说明） 
 - 接口请求参数：
 
-| 参数名 | 必要 | 类型 | 默认值 | 说明 |
-|:--:|:---:|:---:|:---|:---|
-| search | x | string | "" | 将要搜索的字符串，为空时则表现为“占位符搜索” |
-| search_mode | x | enum{0,1,2} | 0 | 匹配模式： 0 - 与（NPHP默认模式）， 1 - 或， 2 - 精准（使用英文双引号确定存在词） |
-| search_area | x | enum{0,3,4,5} | 0 | 范围：     0 - 标题、副标题（默认）， 3 - 发布者， 4 - imdb id， 5 - 豆瓣id |
-| notnewword | x | boolean | 0 | 是否新热门词 |
-| cat          | x      | string\|string[]   | null *    | 类型 |
-| medium       | x      | string\|string[]   | null *    | 媒介 |
-| codec        | x      | string\|string[]   | null *    | 编码 |
-| standard     | x      | string\|string[]   | null *    | 分辨率 |
-| processing   | x      | string\|string[]   | null *    | 地区 |
-| team         | x      | string\|string[]   | null *    | 制作组 |
-| audiocodec   | x      | string\|string[]   | null *    | 音频编码 |
-| incldead     | x         | enum{0,1,2}      | 0  *     | 显示断种/活种：  0 - 包括断种， 1 - 活种， 2 - 断种 | 
-| spstate      | x         | enum{range(0, 7)}   | 0  *     | 促销：   0 - 全部， 1-7 分别表示不同优惠等级 | 
-| inclbookmarked | x       | enum{0,1,2}      | 0  *     | 显示收藏：  0 - 全部， 1 - 仅收藏， 2 - 仅未收藏（因历史遗留问题，当mode为rss时，表示`保种区`） |
-| size           | x       | {min?: int, max?: int} | null | 种子大小（MiB） |
-| times_completed | x      | {min?: int, max?: int} | null | 完成数 |
-| seeders         | x      | {min?: int, max?: int} | null | 做种数（不一定精准） |
-| leechers        | x      | {min?: int, max?: int} | null | 下载数（不一定精准） |
-| tag_gf          | x        | boolean           | 0       | 官方 |
-| tag_diy         | x        | boolean           | 0       | DIY |
-| tag_sf          | x        | boolean           | 0       | 首发 |
-| tag_gy          | x        | boolean           | 0       | 国语 |
-| tag_zz          | x        | boolean           | 0       | 中字 |
-| tag_jz          | x        | boolean           | 0       | 禁转 |
-| tag_yq         | x         | boolean           | 0       | 应求 |
-| tag_db         | x         | boolean           | 0       | 杜比视界 |
-| tag_hdr        | x         | boolean           | 0       | HDR10 |
-| tag_hdrp       | x         | boolean           | 0       | HDR10+ |
-| tag_hlg        | x         | boolean           | 0       | HLG |
-| sort           | x           | enum{0,1,3,4,5,6,7,8,9} | 0 | 排序列： 0 - id, 1 - name, 3 - coments, 4 - added, 5 - size , 6 - times_completed , 7 - seeders , 8 - leechers, 9 - owner |
-| type           | x           | enum{'asc', 'desc'} | 'desc'  | 排列顺序（升序还是降序） |
-| page           | x           | int                | 0      | 第？页（mode不存在或非rss时使用）  |
-| rows           | x         | enum{10,20,30,40,50} | 10    | 每页返回的种子数量（mode为rss时使用） |
-| startindex     | x         | enum{0,1,2,3}                | 0       | 第？页（mode为rss时使用） |
+|       参数名       | 必要 | 类型 | 默认值    | 说明                                                                                                                    |
+|:---------------:|:---:|:---:|:-------|:----------------------------------------------------------------------------------------------------------------------|
+|     search      | x | string | ""     | 将要搜索的字符串，为空时则表现为“占位符搜索”                                                                                               |
+|   search_mode   | x | enum{0,1,2} | 0      | 匹配模式： 0 - 与（NPHP默认模式）， 1 - 或， 2 - 精准（使用英文双引号确定存在词）                                                                    |
+|   search_area   | x | enum{0,3,4,5} | 0      | 范围：     0 - 标题、副标题（默认）， 3 - 发布者， 4 - imdb id， 5 - 豆瓣id                                                                |
+|   notnewword    | x | boolean | 0      | 是否新热门词                                                                                                                |
+|       cat       | x      | string\|string[]   | null * | 类型                                                                                                                    |
+|     medium      | x      | string\|string[]   | null * | 媒介                                                                                                                    |
+|      codec      | x      | string\|string[]   | null * | 编码                                                                                                                    |
+|    standard     | x      | string\|string[]   | null * | 分辨率                                                                                                                   |
+|   processing    | x      | string\|string[]   | null * | 地区                                                                                                                    |
+|      team       | x      | string\|string[]   | null * | 制作组                                                                                                                   |
+|   audiocodec    | x      | string\|string[]   | null * | 音频编码                                                                                                                  |
+|    incldead     | x         | enum{0,1,2}      | 0  *   | 显示断种/活种：  0 - 包括断种， 1 - 活种， 2 - 断种                                                                                    | 
+|     spstate     | x         | enum{range(0, 7)}   | 0  *   | 促销：   0 - 全部， 1-7 分别表示不同优惠等级                                                                                          | 
+| inclbookmarked  | x       | enum{0,1,2}      | 0  *   | 显示收藏：  0 - 全部， 1 - 仅收藏， 2 - 仅未收藏（因历史遗留问题，当mode为rss时，表示`保种区`）                                                          |
+|      size       | x       | {min?: int, max?: int} | null   | 种子大小（MiB）                                                                                                             |
+| times_completed | x      | {min?: int, max?: int} | null   | 完成数                                                                                                                   |
+|     seeders     | x      | {min?: int, max?: int} | null   | 做种数（不一定精准）                                                                                                            |
+|    leechers     | x      | {min?: int, max?: int} | null   | 下载数（不一定精准）                                                                                                            |
+|      tags       | x        | string\|string[]           | null   | 种子标签                                                                                                                  |
+|      sort       | x           | enum{0,1,3,4,5,6,7,8,9} | 0      | 排序列： 0 - id, 1 - name, 3 - coments, 4 - added, 5 - size , 6 - times_completed , 7 - seeders , 8 - leechers, 9 - owner |
+|      type       | x           | enum{'asc', 'desc'} | 'desc' | 排列顺序（升序还是降序）                                                                                                          |
+|      page       | x           | int                | 0      | 第？页（mode不存在或非rss时使用）                                                                                                  |
+|      rows       | x         | enum{10,20,30,40,50} | 10     | 每页返回的种子数量（mode为rss时使用）                                                                                                |
+|   startindex    | x         | enum{0,1,2,3}                | 0      | 第？页（mode为rss时使用）                                                                                                      |
 
 说明： 
 1. 标`*`的请求项如果不存在时，会尝试从用户设置（`设置-网站设置-默认分类`）中获取。
-2. 仅`mode`为rss时，支持设置分页的每页大小，其余情况默认为用户设置值（`设置-网站设置-种子页面`）
-3. 除`mode`为rss时外，其余情况会先按照 `pos_group:desc` （置顶类型）进行排序，后考虑用户传入的排序顺序
+2. 对`cat`, `medium`, `codec`, `standard`, `processing`, `team`, `audiocodec`请求项，如果传入多个值，则取交集。
+3. 对`tags`请求项，如果传入多个值，则取并集。
+4. 仅`mode`为rss时，支持设置分页的每页大小，其余情况默认为用户设置值（`设置-网站设置-种子页面`）
+5. 除`mode`为rss时外，其余情况会先按照 `pos_group:desc` （置顶类型）进行排序，后考虑用户传入的排序顺序
 
 - 成功响应示例：
 ```json5
@@ -189,17 +181,20 @@ OurBits 站点 API 文档
     visible: 1,  // 是否可见
     banned: 0,  // 是否被禁用
     
-    tag_gf: 1,  // 标签：官方（为1时表示存在该标签，下同）
-    tag_diy: 1,  // 标签：DIY
-    tag_sf: 0,  // 标签：首发
-    tag_gy: 1,  // 标签：国语
-    tag_zz: 1,  // 标签：中字
-    tag_jz: 1,  // 标签：禁转
-    tag_yq: 0,  // 标签：应求
-    tag_db: 1,  // 标签：杜比视界
-    tag_hdr: 1,  // 标签：HDR10
-    tag_hlg: 0,  // 标签：HDR10+
-    tag_hdrp: 0,  // 标签：HLG
+    // 标签（存在时才有对应的值）
+    tags: [
+      'gf',   // 标签：官方
+      'sf',   // 标签：首发
+      'diy',  // 标签：DIY
+      'gy',   // 标签：国语 
+      'zz',   // 标签：中字
+      'yq',   // 标签：应求
+      'jz',   // 标签：禁转
+      'db',   // 标签：杜比视界
+      'hdr',  // 标签：HDR10
+      'hdrp', // 标签：HDR10+
+      'hlg'   // 标签：HLG
+    ],
     
     approved: 0,  // 种子审核状态  0=未审核 1=已审核 2=被驳回 3=被举报
     picktype: "hot",  // 'hot' - 热门， 'classic' - 经典，  'recommended' - 推荐， 'normal' - 普通
